@@ -51,6 +51,13 @@ public class CategoryController {
         return categoryService.getCategoryByCode(code);
     }
 
+    //VERIFY
+    @GetMapping("/verify/{code}")
+    public boolean verifyCategoryCode(@PathVariable String code) {
+
+        return categoryService.verifyCategoryCode(code);
+    }
+
     //UPDATE
     @PutMapping("/id/{id}")
     public CategoryResponseDTO updateCategoryById(@PathVariable Long id, @RequestBody CategoryRequestDTO updatedDTO) {

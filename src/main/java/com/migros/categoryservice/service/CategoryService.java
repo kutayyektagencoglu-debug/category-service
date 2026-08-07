@@ -5,6 +5,8 @@ import com.migros.categoryservice.dto.CategoryResponseDTO;
 import com.migros.categoryservice.mapper.CategoryMapper;
 import com.migros.categoryservice.model.Category;
 import com.migros.categoryservice.repository.CategoryRepository;
+import org.aspectj.apache.bcel.classfile.Code;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -60,6 +62,11 @@ public class CategoryService {
         Category category = categoryRepository.findByCode(code)
                 .orElseThrow(() ->  new IllegalArgumentException("Category not found: " + code));
         return mapper.toResponseDTO(category);
+    }
+
+    //VERIFY
+    public boolean verifyCategoryCode(String code) {
+        return categoryRepository.existsByCode(code);
     }
 
     //UPDATE CATEGORY NAME
