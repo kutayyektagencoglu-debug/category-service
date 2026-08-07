@@ -34,7 +34,7 @@ public class CategoryService {
         if(categoryRepository.existsByCode(category.getCode())) {
             throw new IllegalArgumentException("Category code already exists");
         }
-
+        category.setCode(category.getCode().toUpperCase());
         Category saved = categoryRepository.save(category);
         return mapper.toResponseDTO(saved);
     }
