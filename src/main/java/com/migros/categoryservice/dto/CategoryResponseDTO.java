@@ -1,7 +1,6 @@
 package com.migros.categoryservice.dto;
 
-import com.migros.categoryservice.enums.CategoryType;
-import com.migros.categoryservice.enums.UnitType;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,8 +14,6 @@ import lombok.Setter;
 public class CategoryResponseDTO {
     private Long id;
     private String name;
+    @Size(min = 2, max = 2)
     private String code;
-    private String brand;
-    private UnitType unit;
-    private CategoryType categoryCode;
 }

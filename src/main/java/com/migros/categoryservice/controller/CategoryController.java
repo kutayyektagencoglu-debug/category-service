@@ -2,8 +2,6 @@ package com.migros.categoryservice.controller;
 
 import com.migros.categoryservice.dto.CategoryRequestDTO;
 import com.migros.categoryservice.dto.CategoryResponseDTO;
-import com.migros.categoryservice.enums.CategoryType;
-import com.migros.categoryservice.enums.UnitType;
 import com.migros.categoryservice.service.CategoryService;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,80 +18,72 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    // CREATE
+    //CREATE
     @PostMapping
     public CategoryResponseDTO createCategory(@RequestBody CategoryRequestDTO dto) {
 
         return categoryService.createCategory(dto);
     }
 
-    // READ ALL
+    //READ ALL
     @GetMapping
     public List<CategoryResponseDTO> getAllCategories() {
 
         return categoryService.getAllCategories();
     }
     //READ BY ID
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public  CategoryResponseDTO getCategoryById(@PathVariable Long id) {
+
         return categoryService.getCategoryById(id);
     }
-    // READ BY NAME
-    @GetMapping("/{name}")
+    //READ BY NAME
+    @GetMapping("/name/{name}")
     public CategoryResponseDTO getCategoryByName(@PathVariable String name) {
 
         return categoryService.getCategoryByName(name);
     }
 
     //READ BY CODE
-    @GetMapping("/{code}")
+    @GetMapping("/code/{code}")
     public CategoryResponseDTO getCategoryByCode(@PathVariable String code){
 
         return categoryService.getCategoryByCode(code);
     }
 
-    //READ BY UNIT
-    @GetMapping("/{unit}")
-    public List<CategoryResponseDTO> getCategoryByUnit(@PathVariable UnitType unit){
+    //UPDATE
+    @PutMapping("/id/{id}")
+    public CategoryResponseDTO updateCategoryById(@PathVariable Long id, @RequestBody CategoryRequestDTO updatedDTO) {
 
-        return categoryService.getCategoryByUnit(unit);
+        return categoryService.updateCategoryById(id, updatedDTO);
     }
 
-    //READ BY CATEGORY CODE
-    @GetMapping("/{categoryCode}")
-    public List<CategoryResponseDTO> getCategoryByCategoryCode(@PathVariable CategoryType categoryCode){
+    @PutMapping("/name/{name}")
+    public CategoryResponseDTO updateCategoryByName(@PathVariable String name, @RequestBody CategoryRequestDTO updatedDTO) {
 
-        return categoryService.getCategoryByCategoryCode(categoryCode);
+        return categoryService.updateCategoryByName(name, updatedDTO);
     }
 
-    //READ BY BRAND
-    @GetMapping("/{brand}")
-    public List<CategoryResponseDTO> getCategoryByBrand(@PathVariable String brand){
+    @PutMapping("/code/{code}")
+    public CategoryResponseDTO updateCategoryByCode(@PathVariable String code, @RequestBody CategoryRequestDTO updatedDTO) {
 
-        return categoryService.getCategoryByBrand(brand);
+        return categoryService.updateCategoryByCode(code, updatedDTO);
     }
 
-    // UPDATE
-    @PutMapping("/{name}")
-    public CategoryResponseDTO updateCategory(@PathVariable String name, @RequestBody CategoryRequestDTO updatedDTO) {
-
-        return categoryService.updateCategory(name, updatedDTO);
-    }
-
-    // DELETE
-    @DeleteMapping("/{id}")
+    //DELETE
+    @DeleteMapping("/id/{id}")
     public void deleteCategoryById(@PathVariable Long id) {
 
         categoryService.deleteCategoryById(id);
     }
 
-    @DeleteMapping("/{name}")
+    @DeleteMapping("/name/{name}")
     public void deleteCategoryByName(@PathVariable String name) {
 
         categoryService.deleteCategoryByName(name);
     }
 
-    @DeleteMapping("/{code}")
+    @DeleteMapping("/code/{code}")
     public void deleteCategoryByCode(@PathVariable String code) {
 
         categoryService.deleteCategoryByCode(code);
