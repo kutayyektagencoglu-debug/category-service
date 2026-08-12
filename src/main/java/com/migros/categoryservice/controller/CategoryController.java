@@ -3,12 +3,13 @@ package com.migros.categoryservice.controller;
 import com.migros.categoryservice.dto.CategoryRequestDTO;
 import com.migros.categoryservice.dto.CategoryResponseDTO;
 import com.migros.categoryservice.service.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/category-service")
+@RequestMapping("/api/v1/category")
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -20,7 +21,7 @@ public class CategoryController {
 
     //CREATE
     @PostMapping
-    public CategoryResponseDTO createCategory(@RequestBody CategoryRequestDTO dto) {
+    public CategoryResponseDTO createCategory(@Valid @RequestBody CategoryRequestDTO dto) {
 
         return categoryService.createCategory(dto);
     }
@@ -59,31 +60,20 @@ public class CategoryController {
     }
 
     //UPDATE
-    @PutMapping("/id/{id}")
-    public CategoryResponseDTO updateCategoryById(@PathVariable Long id, @RequestBody CategoryRequestDTO updatedDTO) {
-
-        return categoryService.updateCategoryById(id, updatedDTO);
-    }
-
     @PutMapping("/name/{name}")
-    public CategoryResponseDTO updateCategoryByName(@PathVariable String name, @RequestBody CategoryRequestDTO updatedDTO) {
+    public CategoryResponseDTO updateCategoryByName(@PathVariable String name, @Valid @RequestBody CategoryRequestDTO updatedDTO) {
 
         return categoryService.updateCategoryByName(name, updatedDTO);
     }
 
     @PutMapping("/code/{code}")
-    public CategoryResponseDTO updateCategoryByCode(@PathVariable String code, @RequestBody CategoryRequestDTO updatedDTO) {
+    public CategoryResponseDTO updateCategoryByCode(@PathVariable String code, @Valid @RequestBody CategoryRequestDTO updatedDTO) {
 
         return categoryService.updateCategoryByCode(code, updatedDTO);
     }
 
     //DELETE
-    @DeleteMapping("/id/{id}")
-    public void deleteCategoryById(@PathVariable Long id) {
-
-        categoryService.deleteCategoryById(id);
-    }
-
+    /*
     @DeleteMapping("/name/{name}")
     public void deleteCategoryByName(@PathVariable String name) {
 
@@ -95,5 +85,6 @@ public class CategoryController {
 
         categoryService.deleteCategoryByCode(code);
     }
+    */
 }
 

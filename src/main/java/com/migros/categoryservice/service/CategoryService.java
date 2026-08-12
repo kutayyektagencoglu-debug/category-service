@@ -70,16 +70,6 @@ public class CategoryService {
     }
 
     //UPDATE CATEGORY NAME
-    public CategoryResponseDTO updateCategoryById(Long id, CategoryRequestDTO desiredDTO) {
-        Category existingCategory = categoryRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Category not found: " + id));
-
-        existingCategory.setName(desiredDTO.getName());
-
-        Category saved = categoryRepository.save(existingCategory);
-        return mapper.toResponseDTO(saved);
-    }
-
     public CategoryResponseDTO updateCategoryByName(String name, CategoryRequestDTO desiredDTO) {
         Category existingCategory = categoryRepository.findByName(name)
                 .orElseThrow(() -> new IllegalArgumentException("Category not found: " + name));
@@ -101,15 +91,7 @@ public class CategoryService {
     }
 
     //DELETE
-    public void deleteCategoryById(Long id) {
-        if(!categoryRepository.existsById(id)) {
-            throw new IllegalArgumentException("Category not found: " + id);
-        }
-        //check whether category has any products before deleting
-        categoryRepository.deleteById(id);
-    }
-
-    public void deleteCategoryByName(String name) {
+    /*public void deleteCategoryByName(String name) {
         if(!categoryRepository.existsByName(name)) {
             throw new IllegalArgumentException("Category not found: " + name);
         }
@@ -123,5 +105,5 @@ public class CategoryService {
         }
         //check whether category has any products before deleting
         categoryRepository.deleteByCode(code);
-    }
+    }*/
 }
