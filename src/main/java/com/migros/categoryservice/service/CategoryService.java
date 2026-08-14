@@ -5,6 +5,8 @@ import com.migros.categoryservice.dto.CategoryResponseDTO;
 import com.migros.categoryservice.mapper.CategoryMapper;
 import com.migros.categoryservice.model.Category;
 import com.migros.categoryservice.repository.CategoryRepository;
+import com.migros.commonerror.exception.BusinessException;
+import jakarta.transaction.Transactional;
 import org.aspectj.apache.bcel.classfile.Code;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
@@ -25,14 +27,14 @@ public class CategoryService {
     //CREATE
     public CategoryResponseDTO createCategory(CategoryRequestDTO dto) {
         if(dto.getCode().length() != 2) {
-            throw new IllegalArgumentException("Invalid code (Code has to be 2 letters");
+            throw new BusinessException("INVALID_CATEGORY_CODE", "Code has to be 2 letters", 400);
         }
         Category category = mapper.toEntity(dto);
         if(categoryRepository.existsByName(category.getName())) {
-            throw new IllegalArgumentException("Category name already exists");
+            throw new BusinessException("CATEGORY_NAME_EXISTS", "Category name already exists", 409);
         }
         if(categoryRepository.existsByCode(category.getCode())) {
-            throw new IllegalArgumentException("Category code already exists");
+            throw new BusinessException("CATEGORY_CODE_EXISTS", "Category code already exists", 409);
         }
         category.setCode(category.getCode().toUpperCase());
         Category saved = categoryRepository.save(category);
@@ -47,20 +49,20 @@ public class CategoryService {
     //READ BY ID
     public CategoryResponseDTO getCategoryById(Long id) {
         Category category= categoryRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Category not found: " + id));
+                .orElseThrow(() -> new BusinessException("CATEGORY_NOT_FOUND", "Category not found: " + id, 404));
         return mapper.toResponseDTO(category);
     }
     //READ BY NAME
     public CategoryResponseDTO getCategoryByName(String name) {
         Category category = categoryRepository.findByName(name)
-                .orElseThrow(() -> new IllegalArgumentException("Category not found: " + name));
+                .orElseThrow(() -> new BusinessException("CATEGORY_NOT_FOUND", "Category not found: " + name, 404));
         return mapper.toResponseDTO(category);
     }
 
     //READ BY CODE
     public CategoryResponseDTO getCategoryByCode(String code){
         Category category = categoryRepository.findByCode(code)
-                .orElseThrow(() ->  new IllegalArgumentException("Category not found: " + code));
+                .orElseThrow(() -> new BusinessException("CATEGORY_NOT_FOUND", "Category not found: " + code, 404));
         return mapper.toResponseDTO(category);
     }
 
@@ -70,19 +72,20 @@ public class CategoryService {
     }
 
     //UPDATE CATEGORY NAME
+    @Transactional
     public CategoryResponseDTO updateCategoryByName(String name, CategoryRequestDTO desiredDTO) {
         Category existingCategory = categoryRepository.findByName(name)
-                .orElseThrow(() -> new IllegalArgumentException("Category not found: " + name));
+                .orElseThrow(() -> new BusinessException("CATEGORY_NOT_FOUND", "Category not found: " + name, 404));
 
         existingCategory.setName(desiredDTO.getName());
 
         Category saved = categoryRepository.save(existingCategory);
         return mapper.toResponseDTO(saved);
     }
-
+    @Transactional
     public CategoryResponseDTO updateCategoryByCode(String code, CategoryRequestDTO desiredDTO) {
         Category existingCategory = categoryRepository.findByCode(code)
-                .orElseThrow(() -> new IllegalArgumentException("Category not found: " + code));
+                .orElseThrow(() -> new BusinessException("CATEGORY_NOT_FOUND", "Category not found: " + code, 404));
 
         existingCategory.setName(desiredDTO.getName());
 
@@ -91,19 +94,22 @@ public class CategoryService {
     }
 
     //DELETE
-    /*public void deleteCategoryByName(String name) {
+    /*
+    @Transactional
+    public void deleteCategoryByName(String name) {
         if(!categoryRepository.existsByName(name)) {
             throw new IllegalArgumentException("Category not found: " + name);
         }
         //check whether category has any products before deleting
         categoryRepository.deleteByName(name);
     }
-
+    @Transactional
     public void deleteCategoryByCode(String code) {
         if(!categoryRepository.existsByCode(code)) {
             throw new IllegalArgumentException("Category not found: " + code);
         }
         //check whether category has any products before deleting
         categoryRepository.deleteByCode(code);
-    }*/
+    }
+    */
 }
