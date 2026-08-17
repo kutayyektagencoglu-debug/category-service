@@ -60,11 +60,13 @@ public class CategoryController {
     }
 
     //UPDATE
+    /*
     @PutMapping("/name/{name}")
     public CategoryResponseDTO updateCategoryByName(@PathVariable String name, @Valid @RequestBody CategoryRequestDTO updatedDTO) {
 
         return categoryService.updateCategoryByName(name, updatedDTO);
     }
+     */
 
     @PutMapping("/code/{code}")
     public CategoryResponseDTO updateCategoryByCode(@PathVariable String code, @Valid @RequestBody CategoryRequestDTO updatedDTO) {
@@ -74,12 +76,6 @@ public class CategoryController {
 
     //DELETE
     /*
-    @DeleteMapping("/name/{name}")
-    public void deleteCategoryByName(@PathVariable String name) {
-
-        categoryService.deleteCategoryByName(name);
-    }
-
     @DeleteMapping("/code/{code}")
     public void deleteCategoryByCode(@PathVariable String code) {
 

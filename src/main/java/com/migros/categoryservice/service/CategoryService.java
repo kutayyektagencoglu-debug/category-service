@@ -33,10 +33,12 @@ public class CategoryService {
         if(categoryRepository.existsByName(category.getName())) {
             throw new BusinessException("CATEGORY_NAME_EXISTS", "Category name already exists", 409);
         }
-        if(categoryRepository.existsByCode(category.getCode())) {
+
+        String code = category.getCode().toUpperCase();
+        if(categoryRepository.existsByCode(code)) {
             throw new BusinessException("CATEGORY_CODE_EXISTS", "Category code already exists", 409);
         }
-        category.setCode(category.getCode().toUpperCase());
+        category.setCode(code);
         Category saved = categoryRepository.save(category);
         return mapper.toResponseDTO(saved);
     }
@@ -72,6 +74,7 @@ public class CategoryService {
     }
 
     //UPDATE CATEGORY NAME
+    /*
     @Transactional
     public CategoryResponseDTO updateCategoryByName(String name, CategoryRequestDTO desiredDTO) {
         Category existingCategory = categoryRepository.findByName(name)
@@ -82,11 +85,15 @@ public class CategoryService {
         Category saved = categoryRepository.save(existingCategory);
         return mapper.toResponseDTO(saved);
     }
+     */
     @Transactional
     public CategoryResponseDTO updateCategoryByCode(String code, CategoryRequestDTO desiredDTO) {
         Category existingCategory = categoryRepository.findByCode(code)
                 .orElseThrow(() -> new BusinessException("CATEGORY_NOT_FOUND", "Category not found: " + code, 404));
 
+        if(!desiredDTO.getCode().equals(existingCategory.getCode())) {
+            throw new BusinessException("WRONG_CATEGORY_CODE", "You can't change category code", 400);
+        }
         existingCategory.setName(desiredDTO.getName());
 
         Category saved = categoryRepository.save(existingCategory);
@@ -95,14 +102,6 @@ public class CategoryService {
 
     //DELETE
     /*
-    @Transactional
-    public void deleteCategoryByName(String name) {
-        if(!categoryRepository.existsByName(name)) {
-            throw new IllegalArgumentException("Category not found: " + name);
-        }
-        //check whether category has any products before deleting
-        categoryRepository.deleteByName(name);
-    }
     @Transactional
     public void deleteCategoryByCode(String code) {
         if(!categoryRepository.existsByCode(code)) {
